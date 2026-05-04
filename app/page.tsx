@@ -605,14 +605,12 @@ export default function Portfolio() {
                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight">
                   <span className="text-indigo-600">{typed}</span>
                   <span className="animate-pulse text-indigo-400">|</span>
-                  <br />
-                  <span className="text-gray-900">Web & Mobile</span>
                 </h1>
               </AnimatedSection>
 
               <AnimatedSection delay={560}>
                 <p className="text-gray-600 max-w-lg mb-8 leading-relaxed text-sm md:text-base font-medium">
-                  Développeur web et desktop, je crée des solutions performantes et centrées sur l'utilisateur.
+                  Développeur web et mobile, je crée des solutions performantes et centrées sur l'utilisateur.
                   Curieux et attentif aux détails, je suis en apprentissage constant pour intégrer les dernières
                   technologies.
                 </p>
@@ -782,7 +780,7 @@ export default function Portfolio() {
             },
             {
               num: "04",
-              category: "Desktop",
+              category: "Mobile",
               title: "SGA-UTA — Gestion des Présences",
               description: "Application de gestion des présences et absences permettant à l'université d'optimiser le suivi de l'assiduité des étudiants.",
               technologies: ["Java", "PostgreSQL"],
@@ -804,7 +802,7 @@ export default function Portfolio() {
             },
             {
               num: "06",
-              category: "Desktop",
+              category: "Mobile",
               title: "Système de Bibliothèque",
               description: "Système complet de gestion de bibliothèque permettant l'enregistrement des utilisateurs et la gestion des emprunts de livres.",
               technologies: ["Java", "MySQL"],
