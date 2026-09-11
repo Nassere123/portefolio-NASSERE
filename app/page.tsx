@@ -7,6 +7,7 @@ import { faUsers, faLightbulb, faComments, faBolt, faGraduationCap, faBriefcase,
 import { faWhatsapp, faGithub, faFacebook } from "@fortawesome/free-brands-svg-icons"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import ChatBot from "@/components/ChatBot"
 import {
   Github,
   Mail,
@@ -1056,6 +1057,9 @@ export default function Portfolio() {
         </div>
         <p className="text-gray-300 text-xs">© 2025 Nassere Yacouba. Tous droits réservés.</p>
       </footer>
+
+      {/* Assistant Virtuel Chatbot */}
+      <ChatBot />
     </div>
   )
 }
