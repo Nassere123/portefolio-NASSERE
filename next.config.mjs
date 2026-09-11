@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export' retiré pour permettre les routes API /api/chat avec @netlify/plugin-nextjs
   eslint: {
     ignoreDuringBuilds: true,
   },

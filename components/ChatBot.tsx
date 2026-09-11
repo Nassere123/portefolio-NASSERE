@@ -122,27 +122,50 @@ export default function ChatBot() {
         .concat(userMessage)
         .map((m) => ({ role: m.role, content: m.content }))
 
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: historyToSend, message: textToSend }),
-      })
+      let replyText = ""
 
-      const data = await res.json()
+      if (res.ok) {
+        const data = await res.json()
+        replyText = data.reply
+      }
+
+      if (!replyText) {
+        // Secours automatique si l'API est temporairement inaccessible sur Netlify
+        const q = textToSend.toLowerCase()
+        if (q.includes("projet") || q.includes("réalisation")) {
+          replyText = "Nassere a développé plusieurs projets phares :\n- **Application Mobile de Livraison** (React Native, Expo, NestJS, PostgreSQL)\n- **Cerise Communication & Marketing** (React.js) : [cerisecm.com](https://cerisecm.com)\n- **Hub Formations et Conseil** (React.js) : [hcfconseil.com](https://hcfconseil.com)\n- **SGA-UTA** (Java, PostgreSQL) : gestion des présences\n\nVous pouvez les explorer directement dans la section **Projets** !"
+        } else if (q.includes("competence") || q.includes("compétence") || q.includes("stack") || q.includes("techno")) {
+          replyText = "Nassere maîtrise une stack complète :\n- **Frontend / Mobile** : React.js, Next.js, React Native, Expo, Angular, TypeScript, TailwindCSS\n- **Backend** : NestJS, Laravel, PHP, Java, Python\n- **Bases de données** : PostgreSQL, MySQL, MongoDB Atlas, Oracle"
+        } else if (q.includes("contact") || q.includes("joindre") || q.includes("whatsapp") || q.includes("mail")) {
+          replyText = "Vous pouvez contacter Nassere directement via :\n- 📱 **WhatsApp** : [+225 07 07 63 21 40](https://wa.me/2250707632140)\n- ✉️ **Email** : [moktarnassere@gmail.com](mailto:moktarnassere@gmail.com)\n- 💻 **GitHub** : [github.com/Nassere123](https://github.com/Nassere123/PORTFOLIO-NASSERE)"
+        } else if (q.includes("disponible") || q.includes("mission") || q.includes("recrute")) {
+          replyText = "Oui ! Nassere est ouvert aux nouvelles opportunités (freelance, projets innovants ou CDI). Écrivez-lui directement sur [WhatsApp (+225 0707632140)](https://wa.me/2250707632140) !"
+        } else {
+          replyText = "Nassere Yacouba est Développeur Fullstack Web & Mobile basé à Abidjan. Vous pouvez lui poser des questions sur ses compétences, ses projets ou le joindre sur [WhatsApp](https://wa.me/2250707632140) !"
+        }
+      }
+
       const botReply: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: data.reply || "Désolé, je n'ai pas pu obtenir de réponse.",
+        content: replyText,
       }
 
       setMessages((prev) => [...prev, botReply])
     } catch (error) {
       console.error("Chat error:", error)
+      const q = textToSend.toLowerCase()
+      let fallback = "Nassere est Développeur Web & Mobile Fullstack basé à Abidjan. N'hésitez pas à le contacter directement sur [WhatsApp (+225 0707632140)](https://wa.me/2250707632140) !"
+      if (q.includes("projet")) {
+        fallback = "Nassere a conçu l'Application Mobile de Livraison (React Native, NestJS), et les sites [cerisecm.com](https://cerisecm.com) et [hcfconseil.com](https://hcfconseil.com) !"
+      } else if (q.includes("contact") || q.includes("joindre")) {
+        fallback = "Contactez Nassere sur WhatsApp : [+225 07 07 63 21 40](https://wa.me/2250707632140) ou par email : [moktarnassere@gmail.com](mailto:moktarnassere@gmail.com) !"
+      }
+
       const errorMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content:
-          "Une petite coupure est survenue. N'hésitez pas à contacter directement Nassere sur [WhatsApp](https://wa.me/2250707632140) !",
+        content: fallback,
       }
       setMessages((prev) => [...prev, errorMsg])
     } finally {
