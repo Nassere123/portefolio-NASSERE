@@ -122,6 +122,12 @@ export default function ChatBot() {
         .concat(userMessage)
         .map((m) => ({ role: m.role, content: m.content }))
 
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: historyToSend, message: textToSend }),
+      })
+
       let replyText = ""
 
       if (res.ok) {

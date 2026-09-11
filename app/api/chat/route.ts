@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 
+export const dynamic = "force-dynamic"
+
 const SYSTEM_PROMPT = `
 Tu es l'assistant virtuel officiel de Nassere Yacouba, un développeur Web & Mobile Fullstack talentueux basé à Abidjan, Côte d'Ivoire.
 Ton rôle est de répondre de façon claire, polie, professionnelle et chaleureuse aux visiteurs de son portfolio (recruteurs, clients, partenaires).
