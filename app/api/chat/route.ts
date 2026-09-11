@@ -93,8 +93,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ reply: "Je n'ai pas bien compris votre message. Pouvez-vous préciser ?" })
     }
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.OPENROUTER_API_KEY
-    let model = process.env.GEMINI_MODEL || "google/gemma-4-31b-it"
+    const apiKey =
+      process.env.GEMINI_API_KEY ||
+      process.env.gemini_api_key ||
+      process.env.OPENROUTER_API_KEY ||
+      process.env.openrouter_api_key ||
+      process.env.GOOGLE_API_KEY ||
+      process.env.google_api_key
+
+    let model =
+      process.env.GEMINI_MODEL ||
+      process.env.gemini_model ||
+      "google/gemma-4-31b-it"
 
     // Si aucune clé API n'est définie, utiliser le fallback intelligent local
     if (!apiKey) {
