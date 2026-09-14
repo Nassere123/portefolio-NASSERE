@@ -31,6 +31,9 @@ import {
   Layers,
   Terminal,
   ChevronDown,
+  Smartphone,
+  Laptop,
+  Server,
 } from "lucide-react"
 
 // ─── Hooks ────────────────────────────────────────────────────────────────────
@@ -165,7 +168,7 @@ function SoftSkillCards() {
       {items.map((s, i) => (
         <div
           key={i}
-          className={`bg-white border ${s.border} ${s.hover} rounded-3xl p-6 shadow-sm flex flex-col gap-4 
+          className={`bg-white border ${s.border} ${s.hover} rounded-lg p-6 shadow-sm flex flex-col gap-4 
             transition-all duration-300 ease-out
             hover:-translate-y-2 hover:shadow-lg cursor-default`}
         >
@@ -203,7 +206,7 @@ function SkillCard({
   skills: string[]
 }) {
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-300">
+    <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-300">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
           {icon}
@@ -318,6 +321,7 @@ export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
   const [loaded, setLoaded] = useState(false)
+  const [projectFilter, setProjectFilter] = useState<"all" | "web" | "mobile" | "backend">("all")
 
   const typed = useTypewriterLoop([
     "Développeur Web & Mobile",
@@ -383,51 +387,120 @@ export default function Portfolio() {
 
   const projects = [
     {
-      title: "Application Mobile de Livraison",
+      num: "01",
+      category: "Mobile",
+      filterKeys: ["mobile"],
+      title: "Application de Livraison",
       description:
-        "Durant mon stage académique, j'ai travaillé sur une application mobile de livraison de colis depuis une gare jusqu'au domicile du client.",
+        "Application mobile de logistique permettant l'acheminement et le suivi de colis depuis une gare jusqu'au domicile du destinataire.",
       technologies: ["React Native", "Expo", "NestJS", "PostgreSQL"],
-      learnings: "Développement mobile, architecture backend REST, gestion de stage en conditions réelles",
-      accent: "bg-gradient-to-r from-sky-500 to-blue-600",
-      icon: <Globe className="w-4 h-4" />,
+      learnings: "Architecture backend REST, géolocalisation, gestion de stage académique",
+      gradient: "from-sky-500 to-blue-600",
+      image: null,
+      icon: <Smartphone className="w-8 h-8" />,
+      link: "#",
+      github: "https://github.com/Nassere123",
+      status: "Projet Académique",
+      isProduction: false,
     },
     {
-      title: "Sites Web — Cerise & Hub Formations",
+      num: "02",
+      category: "Web",
+      filterKeys: ["web"],
+      title: "Cerise Communication & Marketing",
       description:
-        "Développement et déploiement des sites web de Cerise Communication & Marketing et de Hub Formations et Conseil durant mon stage à LONIYA TECH (2024-2025).",
-      technologies: ["React.js", "EmailJS"],
-      learnings: "Déploiement en production, relation client, intégration de formulaires de contact",
-      accent: "bg-gradient-to-r from-violet-500 to-purple-600",
-      icon: <Briefcase className="w-4 h-4" />,
+        "Développement et déploiement en production du site web institutionnel de l'agence Cerise Communication & Marketing durant mon stage à LONIYA TECH.",
+      technologies: ["React.js", "EmailJS", "TailwindCSS"],
+      learnings: "Déploiement en production, relation client, intégration de formulaires dynamiques",
+      gradient: "from-rose-500 to-red-600",
+      image: "/images/cerisecm.png",
+      icon: <Laptop className="w-8 h-8" />,
+      link: "https://cerisecm.com",
+      github: null,
+      status: "En Production",
+      isProduction: true,
     },
     {
+      num: "03",
+      category: "Web",
+      filterKeys: ["web"],
+      title: "Hub Formations et Conseil",
+      description:
+        "Plateforme web moderne présentant le catalogue des formations et les solutions de conseil d'entreprise du cabinet HCF Conseil.",
+      technologies: ["React.js", "EmailJS", "Responsive UI"],
+      learnings: "Conception d'interfaces soignées, optimisation SEO, satisfaction client",
+      gradient: "from-violet-500 to-purple-600",
+      image: "/images/hub.png",
+      icon: <Laptop className="w-8 h-8" />,
+      link: "https://hcfconseil.com",
+      github: null,
+      status: "En Production",
+      isProduction: true,
+    },
+    {
+      num: "04",
+      category: "Mobile & Système",
+      filterKeys: ["mobile", "backend"],
       title: "SGA-UTA — Gestion des Présences",
       description:
-        "Application de gestion des présences et absences permettant à l'université d'optimiser le suivi de l'assiduité des étudiants.",
-      technologies: ["Java", "PostgreSQL"],
-      learnings: "Gestion de projet, travail en équipe, maîtrise de Java",
-      accent: "bg-gradient-to-r from-emerald-500 to-teal-600",
-      icon: <Users className="w-4 h-4" />,
+        "Application de gestion et suivi des présences et absences permettant à l'université d'optimiser le suivi rigoureux de l'assiduité étudiante.",
+      technologies: ["Java", "PostgreSQL", "Architecture MVC"],
+      learnings: "Gestion de projet, modélisation de données académiques, maîtrise de Java",
+      gradient: "from-emerald-500 to-teal-600",
+      image: null,
+      icon: <Smartphone className="w-8 h-8" />,
+      link: "#",
+      github: "https://github.com/Nassere123",
+      status: "Système Universitaire",
+      isProduction: false,
     },
     {
-      title: "Application de Gestion des Notes",
+      num: "05",
+      category: "Web",
+      filterKeys: ["web"],
+      title: "Gestion des Notes Scolaires",
       description:
-        "Application web permettant de gérer les notes d'une école, développée pour l'UTA avec une interface utilisateur moderne.",
-      technologies: ["PHP", "Laravel", "JavaScript"],
-      learnings: "Développement Front-End, framework Laravel, MVC",
-      accent: "bg-gradient-to-r from-orange-500 to-amber-600",
-      icon: <GraduationCap className="w-4 h-4" />,
+        "Application web permettant la saisie des notes, le calcul automatisé des moyennes et la génération de relevés pour l'UTA avec interface intuitive.",
+      technologies: ["PHP", "Laravel", "JavaScript", "MySQL"],
+      learnings: "Architecture MVC Laravel, intégrité des données scolaires, sécurité",
+      gradient: "from-orange-500 to-amber-600",
+      image: null,
+      icon: <Laptop className="w-8 h-8" />,
+      link: "#",
+      github: "https://github.com/Nassere123",
+      status: "Application Web",
+      isProduction: false,
     },
     {
+      num: "06",
+      category: "Backend & Système",
+      filterKeys: ["backend"],
       title: "Système de Gestion de Bibliothèque",
       description:
-        "Système complet de gestion de bibliothèque permettant l'enregistrement des utilisateurs et la gestion des emprunts de livres.",
-      technologies: ["Java", "MySQL"],
-      learnings: "Travail sous pression, respect des délais, gestion de base de données",
-      accent: "bg-gradient-to-r from-rose-500 to-red-600",
-      icon: <Database className="w-4 h-4" />,
+        "Solution complète d'informatisation de bibliothèque permettant la gestion des adhérents, des fiches d'ouvrages et le suivi précis des emprunts.",
+      technologies: ["Java", "MySQL", "JDBC"],
+      learnings: "Bases de données relationnelles, logique métier robuste, respect des délais",
+      gradient: "from-indigo-500 to-violet-600",
+      image: null,
+      icon: <Server className="w-8 h-8" />,
+      link: "#",
+      github: "https://github.com/Nassere123",
+      status: "Système & BDD",
+      isProduction: false,
     },
   ]
+
+  const filterCategories = [
+    { id: "all", label: "Tous", count: projects.length },
+    { id: "web", label: "Web", count: projects.filter((p) => p.filterKeys.includes("web")).length },
+    { id: "mobile", label: "Mobile", count: projects.filter((p) => p.filterKeys.includes("mobile")).length },
+    { id: "backend", label: "Backend & Systèmes", count: projects.filter((p) => p.filterKeys.includes("backend")).length },
+  ]
+
+  const filteredProjects =
+    projectFilter === "all"
+      ? projects
+      : projects.filter((p) => p.filterKeys.includes(projectFilter))
 
   const education = [
     {
@@ -709,7 +782,7 @@ export default function Portfolio() {
               ].map((tech, i) => (
                 <AnimatedSection key={tech.name} delay={i * 50}>
                   <div className="flex flex-col items-center gap-3 group cursor-default">
-                    <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center shadow-sm group-hover:-translate-y-2 group-hover:shadow-md group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-all duration-300">
+                    <div className="w-16 h-16 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shadow-sm group-hover:-translate-y-2 group-hover:shadow-md group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-all duration-300">
                       <img
                         src={tech.icon}
                         alt={tech.name}
@@ -743,134 +816,160 @@ export default function Portfolio() {
           </AnimatedSection>
         </div>
 
-        {/* Sticky scroll stack */}
-        <div className="max-w-5xl mx-auto">
-          {[
-            {
-              num: "01",
-              category: "Mobile",
-              title: "Application de Livraison",
-              description: "Durant mon stage académique, j'ai travaillé sur une application mobile de livraison de colis depuis une gare jusqu'au domicile du client.",
-              technologies: ["React Native", "Expo", "NestJS", "PostgreSQL"],
-              gradient: "from-sky-500 to-blue-600",
-              emoji: "📦",
-              image: null,
-              link: "#",
-            },
-            {
-              num: "02",
-              category: "Web",
-              title: "Cerise Communication & Marketing",
-              description: "Développement et déploiement du site web de Cerise Communication & Marketing durant mon stage à LONIYA TECH (2024-2025).",
-              technologies: ["React.js", "EmailJS"],
-              gradient: "from-red-500 to-rose-600",
-              emoji: "📣",
-              image: "/images/cerisecm.png",
-              link: "https://cerisecm.com",
-            },
-            {
-              num: "03",
-              category: "Web",
-              title: "Hub Formations et Conseil",
-              description: "Développement et déploiement du site web de Hub Formations et Conseil durant mon stage à LONIYA TECH (2024-2025).",
-              technologies: ["React.js", "EmailJS"],
-              gradient: "from-violet-500 to-purple-600",
-              emoji: "🎯",
-              image: "/images/hub.png",
-              link: "https://hcfconseil.com",
-            },
-            {
-              num: "04",
-              category: "Mobile",
-              title: "SGA-UTA — Gestion des Présences",
-              description: "Application de gestion des présences et absences permettant à l'université d'optimiser le suivi de l'assiduité des étudiants.",
-              technologies: ["Java", "PostgreSQL"],
-              gradient: "from-emerald-500 to-teal-600",
-              emoji: "🎓",
-              image: null,
-              link: "#",
-            },
-            {
-              num: "05",
-              category: "Web",
-              title: "Gestion des Notes",
-              description: "Application web permettant de gérer les notes d'une école, développée pour l'UTA avec une interface utilisateur moderne.",
-              technologies: ["PHP", "Laravel", "JavaScript"],
-              gradient: "from-orange-500 to-amber-600",
-              emoji: "📝",
-              image: null,
-              link: "#",
-            },
-            {
-              num: "06",
-              category: "Mobile",
-              title: "Système de Bibliothèque",
-              description: "Système complet de gestion de bibliothèque permettant l'enregistrement des utilisateurs et la gestion des emprunts de livres.",
-              technologies: ["Java", "MySQL"],
-              gradient: "from-rose-500 to-red-600",
-              emoji: "📚",
-              image: null,
-              link: "#",
-            },
-          ].map((p, i) => (
-            <div
-              key={p.title}
-              className="sticky"
-              style={{ top: `${80 + i * 16}px` }}
-            >
-              <div
-                className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-xl mb-10"
-                style={{ zIndex: i + 1 }}
-              >
-                <div className="flex flex-col md:flex-row min-h-[340px]">
-                  {/* Gauche — texte */}
-                  <div className="flex-1 p-10 pb-12 flex flex-col justify-center">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-6xl font-black text-gray-100 select-none leading-none">{p.num}</span>
-                      <span className="text-indigo-500 text-xs font-bold uppercase tracking-widest">{p.category}</span>
-                    </div>
-                    <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">{p.title}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-md">{p.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {p.technologies.map((t) => (
-                        <span key={t} className="px-3 py-1 text-xs rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 font-medium">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    {p.link !== "#" ? (
-                      <a
-                        href={p.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-md transition-all duration-200 hover:shadow-lg hover:shadow-indigo-200 w-fit"
-                      >
-                        Voir le projet <ExternalLink className="w-4 h-4" />
-                      </a>
-                    ) : (
-                      <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 text-gray-400 text-sm font-semibold rounded-md w-fit cursor-not-allowed">
-                        Lien à venir <ExternalLink className="w-4 h-4" />
-                      </span>
-                    )}                  </div>
+        {/* Barre de filtres par catégorie */}
+        <AnimatedSection delay={150}>
+          <div className="flex flex-wrap justify-center items-center gap-2 mb-12">
+            {filterCategories.map((cat) => {
+              const active = projectFilter === cat.id
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setProjectFilter(cat.id as any)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 ${
+                    active
+                      ? "bg-indigo-600 text-white shadow-sm"
+                      : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/50"
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                  <span
+                    className={`px-1.5 py-0.5 rounded text-[11px] font-semibold ${
+                      active ? "bg-white/20 text-white" : "bg-gray-100 text-gray-600"
+                    }`}
+                  >
+                    {cat.count}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </AnimatedSection>
 
-                  {/* Droite — image ou dégradé */}
-                  {p.image ? (
-                    <div className="md:w-[460px] min-h-[280px] overflow-hidden shrink-0">
+        {/* Grille responsive des réalisations */}
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProjects.map((p, i) => (
+              <AnimatedSection key={p.title} delay={i * 80}>
+                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md hover:border-indigo-300 transition-all duration-300 flex flex-col h-full group">
+                  {/* Visuel Top (Image ou Mockup avec Dégradé) */}
+                  <div className="h-52 relative overflow-hidden bg-gray-50 border-b border-gray-100">
+                    {p.image ? (
                       <img
                         src={p.image}
                         alt={p.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
+                    ) : (
+                      <div
+                        className={`w-full h-full bg-gradient-to-br ${p.gradient} flex flex-col items-center justify-center relative p-6 select-none`}
+                      >
+                        {/* Motif discret */}
+                        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:14px_14px]" />
+                        <div className="w-14 h-14 rounded-md bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-sm mb-2 group-hover:scale-105 transition-transform duration-300">
+                          {p.icon}
+                        </div>
+                        <span className="text-white/90 text-xs font-bold tracking-wider uppercase">
+                          {p.category}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Badge catégorie flottant à gauche */}
+                    <div className="absolute top-3 left-3 flex items-center">
+                      <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider bg-white/95 backdrop-blur-md text-indigo-700 shadow-xs border border-white/60">
+                        {p.category}
+                      </span>
                     </div>
-                  ) : (
-                    <div className={`md:w-[460px] bg-gradient-to-br ${p.gradient} flex items-center justify-center shrink-0 min-h-[280px] rounded-r-3xl`}>
-                      <span className="text-[120px] drop-shadow-lg select-none leading-none">{p.emoji}</span>
+
+                    {/* Badge statut flottant à droite */}
+                    <div className="absolute top-3 right-3">
+                      <span
+                        className={`px-2.5 py-1 rounded-md text-[10px] font-medium backdrop-blur-md shadow-xs ${
+                          p.isProduction
+                            ? "bg-emerald-600 text-white"
+                            : "bg-gray-900/80 text-white"
+                        }`}
+                      >
+                        {p.status}
+                      </span>
                     </div>
-                  )}
+                  </div>
+
+                  {/* Contenu de la carte */}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[11px] font-extrabold text-indigo-500 tracking-wider">
+                          RÉALISATION {p.num}
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors leading-snug">
+                        {p.title}
+                      </h3>
+
+                      <p className="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-3">
+                        {p.description}
+                      </p>
+
+                      {/* Technologies */}
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {p.technologies.map((t) => (
+                          <span
+                            key={t}
+                            className="px-2 py-0.5 text-[11px] rounded-md bg-indigo-50/80 text-indigo-600 border border-indigo-100 font-medium"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Apprentissages clés */}
+                      <div className="bg-gray-50/80 border border-gray-100 rounded-md p-3 mb-5">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
+                          Apprentissages & Défis
+                        </p>
+                        <p className="text-xs text-gray-600 leading-snug">
+                          {p.learnings}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Boutons d'action */}
+                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2.5">
+                      {p.link !== "#" ? (
+                        <a
+                          href={p.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-md transition-all duration-200 hover:shadow-sm"
+                        >
+                          <span>Voir le site</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      ) : (
+                        <span className="flex-1 inline-flex items-center justify-center gap-1 px-4 py-2 bg-gray-100 text-gray-500 text-xs font-medium rounded-md select-none">
+                          <span>{p.status}</span>
+                        </span>
+                      )}
+
+                      {p.github && (
+                        <a
+                          href={p.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Consulter sur GitHub"
+                          className="w-8 h-8 rounded-md border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 shrink-0"
+                        >
+                          <Github className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </AnimatedSection>
+            ))}
+          </div>
         </div>
       </section>
 
