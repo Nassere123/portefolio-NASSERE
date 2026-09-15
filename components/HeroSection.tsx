@@ -117,14 +117,19 @@ export default function HeroSection({ onScrollTo }: HeroProps) {
             </h1>
           </div>
 
-          {/* Portrait Détouré de Nassere en Costume */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 h-[82%] max-h-[780px] w-[min(96vw,560px)] select-none pointer-events-none flex items-end justify-center">
+          {/* Portrait Détouré de Nassere (Assis sur chaise avec ordinateur) */}
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 h-[86%] max-h-[780px] w-[min(96vw,580px)] select-none pointer-events-none flex items-end justify-center">
+            {/* Ombre de contact réaliste sous les roulettes et pieds */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-52 sm:w-64 h-4 bg-slate-950/20 blur-md rounded-full -z-10" />
+
+            {/* Halo doux d'ambiance derrière le corps */}
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-indigo-500/10 blur-3xl -z-10 rounded-full" />
+
             <img
-              src="/images/nassere-clean.png"
+              src="/images/nassere-hero.png"
               alt="Portrait de Nassere Yacouba"
-              className="h-full w-auto max-w-full object-contain object-bottom filter grayscale contrast-110 brightness-105 drop-shadow-2xl"
+              className="h-full w-auto max-w-full object-contain object-bottom drop-shadow-[0_12px_28px_rgba(15,23,42,0.12)]"
             />
-            <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white via-white/40 to-transparent pointer-events-none" />
           </div>
 
           {/* Sceau Circulaire Rotatif (Stamp Badge) */}
@@ -197,13 +202,18 @@ export default function HeroSection({ onScrollTo }: HeroProps) {
 
           {/* 2. Portrait Centré + Badge Flottant Discret */}
           <div className="relative flex items-end justify-center my-2 select-none pointer-events-none">
-            <div className="relative h-[250px] sm:h-[320px] md:h-[380px] w-auto flex items-end justify-center">
+            <div className="relative h-[310px] xs:h-[350px] sm:h-[410px] md:h-[470px] w-auto flex items-end justify-center">
+              {/* Ombre de contact au sol */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-36 sm:w-44 h-3 bg-slate-900/20 blur-sm rounded-full -z-10" />
+
+              {/* Halo d'ambiance */}
+              <div className="absolute top-12 left-1/2 -translate-x-1/2 w-48 h-36 bg-indigo-500/10 blur-2xl -z-10 rounded-full" />
+
               <img
-                src="/images/nassere-clean.png"
+                src="/images/nassere-hero.png"
                 alt="Portrait de Nassere Yacouba"
-                className="h-full w-auto object-contain object-bottom filter grayscale contrast-110 brightness-105 drop-shadow-xl"
+                className="h-full w-auto object-contain object-bottom drop-shadow-[0_8px_20px_rgba(15,23,42,0.10)]"
               />
-              <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white via-white/40 to-transparent" />
             </div>
 
             {/* Sceau Rotatif version mobile/tablette sur le côté */}
