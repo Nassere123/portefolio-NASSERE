@@ -75,7 +75,7 @@ export default function HeroSection({ onScrollTo }: HeroProps) {
   ]
 
   return (
-    <section id="home" className="relative px-3 pt-3 md:px-6 md:pt-6 bg-[#eaeaea] overflow-hidden">
+    <section id="home" className="relative px-3 pt-20 md:px-6 md:pt-24 lg:pt-24 bg-[#eaeaea] overflow-hidden">
       {/* Halo d'ambiance supérieur */}
       <div
         aria-hidden="true"
@@ -83,7 +83,7 @@ export default function HeroSection({ onScrollTo }: HeroProps) {
       />
 
       {/* ── Cadre Principal Blanc Inspiré de CodeurAuChapeau ── */}
-      <div className="relative mx-auto flex min-h-[calc(100svh-24px)] md:min-h-[calc(100svh-48px)] max-w-[1440px] flex-col justify-between overflow-hidden rounded-[2.2rem] md:rounded-[2.8rem] bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/10 p-5 sm:p-8 md:p-10 lg:p-12">
+      <div className="relative mx-auto flex min-h-[calc(100svh-96px)] max-w-[1440px] flex-col justify-between overflow-hidden rounded-[2.2rem] md:rounded-[2.8rem] bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/10 p-5 sm:p-8 md:p-10 lg:p-12">
         
         {/* Halos doux internes */}
         <div className="absolute top-10 left-10 w-96 h-96 bg-indigo-100/30 rounded-full blur-3xl pointer-events-none" />
@@ -91,7 +91,7 @@ export default function HeroSection({ onScrollTo }: HeroProps) {
 
 
         {/* ═══════════════════ VERSION DESKTOP (>= 1024px) ═══════════════════ */}
-        <div className="hidden lg:flex flex-col justify-between h-full min-h-[calc(100svh-96px)] relative">
+        <div className="hidden lg:flex flex-col justify-between h-full min-h-[calc(100svh-120px)] relative">
           
           {/* Typographie Monumentale (NASSERE YACOUBA) */}
           <div className="relative my-auto py-10 z-0">
@@ -181,21 +181,15 @@ export default function HeroSection({ onScrollTo }: HeroProps) {
         </div>
 
         {/* ═══════════════════ VERSION MOBILE & TABLETTE (< 1024px) ═══════════════════ */}
-        <div className="flex lg:hidden flex-col justify-between gap-4 py-2 sm:py-4 relative z-10">
+        <div className="flex lg:hidden flex-col justify-between gap-3 py-2 relative z-10">
           
-          {/* 1. Titre Impactant Responsive */}
-          <div className="text-center pt-1">
-            <h1 className="select-none font-black tracking-tight leading-[0.92]">
-              <span
-                className="inline-block uppercase tracking-tight text-3xl sm:text-5xl md:text-6xl mr-2.5 sm:mr-4"
-                style={{
-                  WebkitTextStroke: "1.5px #0f172a",
-                  color: "transparent",
-                }}
-              >
+          {/* 1. Titre 100% Lisible et Non-Tronqué */}
+          <div className="text-center pt-1 pb-1">
+            <h1 className="select-none font-black tracking-tight leading-tight flex flex-wrap items-center justify-center gap-x-2.5 gap-y-0.5">
+              <span className="uppercase text-2xl xs:text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
                 NASSERE
               </span>
-              <span className="inline-block uppercase text-slate-950 tracking-tight text-3xl sm:text-5xl md:text-6xl">
+              <span className="uppercase text-2xl xs:text-3xl sm:text-5xl font-black text-slate-950 tracking-tight">
                 YACOUBA
               </span>
             </h1>
