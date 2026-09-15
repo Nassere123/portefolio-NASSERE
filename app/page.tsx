@@ -8,6 +8,11 @@ import { faWhatsapp, faGithub, faFacebook } from "@fortawesome/free-brands-svg-i
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import ChatBot from "@/components/ChatBot"
+import ContactSection from "@/components/ContactSection"
+import JourneySection from "@/components/JourneySection"
+import ProjectsBentoSection from "@/components/ProjectsBentoSection"
+import HeroSection from "@/components/HeroSection"
+import AboutSection from "@/components/AboutSection"
 import {
   Github,
   Mail,
@@ -34,7 +39,9 @@ import {
   Smartphone,
   Laptop,
   Server,
+  Lock,
 } from "lucide-react"
+import { INITIAL_PROJECTS, ProjectData } from "@/lib/projects-data"
 
 // ─── Hooks ────────────────────────────────────────────────────────────────────
 
@@ -125,63 +132,6 @@ function AnimatedSection({
   )
 }
 
-// ─── SoftSkillCards ───────────────────────────────────────────────────────────
-
-function SoftSkillCards() {
-  const items = [
-    {
-      icon: faUsers,
-      label: "Travail en équipe",
-      desc: "Collaborer efficacement, partager les responsabilités et avancer ensemble vers un objectif commun.",
-      iconColor: "text-indigo-500",
-      border: "border-indigo-100",
-      hover: "hover:border-indigo-300 hover:shadow-indigo-100",
-    },
-    {
-      icon: faLightbulb,
-      label: "Résolution créative",
-      desc: "Analyser les situations complexes et proposer des solutions innovantes adaptées aux contraintes.",
-      iconColor: "text-amber-500",
-      border: "border-amber-100",
-      hover: "hover:border-amber-300 hover:shadow-amber-100",
-    },
-    {
-      icon: faComments,
-      label: "Communication",
-      desc: "Exprimer clairement les idées, écouter activement et maintenir un dialogue constructif.",
-      iconColor: "text-sky-500",
-      border: "border-sky-100",
-      hover: "hover:border-sky-300 hover:shadow-sky-100",
-    },
-    {
-      icon: faBolt,
-      label: "Adaptabilité",
-      desc: "S'adapter aux nouvelles technologies et environnements de travail avec agilité et curiosité.",
-      iconColor: "text-emerald-500",
-      border: "border-emerald-100",
-      hover: "hover:border-emerald-300 hover:shadow-emerald-100",
-    },
-  ]
-
-  return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      {items.map((s, i) => (
-        <div
-          key={i}
-          className={`bg-white border ${s.border} ${s.hover} rounded-lg p-6 shadow-sm flex flex-col gap-4 
-            transition-all duration-300 ease-out
-            hover:-translate-y-2 hover:shadow-lg cursor-default`}
-        >
-          <FontAwesomeIcon icon={s.icon} className={`text-3xl ${s.iconColor}`} />
-          <div>
-            <p className="font-bold text-gray-900 text-base mb-2">{s.label}</p>
-            <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 // ─── SectionTitle ─────────────────────────────────────────────────────────────
 
@@ -321,7 +271,6 @@ export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
   const [loaded, setLoaded] = useState(false)
-  const [projectFilter, setProjectFilter] = useState<"all" | "web" | "mobile" | "backend">("all")
 
   const typed = useTypewriterLoop([
     "Développeur Web & Mobile",
@@ -332,8 +281,11 @@ export default function Portfolio() {
 
   useEffect(() => { setLoaded(true) }, [])
 
+  const [scrolled, setScrolled] = useState(false)
+
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 180)
       const sections = ["home", "about", "skills", "projects", "education", "contact"]
       const pos = window.scrollY + 120
       for (const id of sections) {
@@ -385,122 +337,7 @@ export default function Portfolio() {
     },
   ]
 
-  const projects = [
-    {
-      num: "01",
-      category: "Mobile",
-      filterKeys: ["mobile"],
-      title: "Application de Livraison",
-      description:
-        "Application mobile de logistique permettant l'acheminement et le suivi de colis depuis une gare jusqu'au domicile du destinataire.",
-      technologies: ["React Native", "Expo", "NestJS", "PostgreSQL"],
-      learnings: "Architecture backend REST, géolocalisation, gestion de stage académique",
-      gradient: "from-sky-500 to-blue-600",
-      image: null,
-      icon: <Smartphone className="w-8 h-8" />,
-      link: "#",
-      github: "https://github.com/Nassere123",
-      status: "Projet Académique",
-      isProduction: false,
-    },
-    {
-      num: "02",
-      category: "Web",
-      filterKeys: ["web"],
-      title: "Cerise Communication & Marketing",
-      description:
-        "Développement et déploiement en production du site web institutionnel de l'agence Cerise Communication & Marketing durant mon stage à LONIYA TECH.",
-      technologies: ["React.js", "EmailJS", "TailwindCSS"],
-      learnings: "Déploiement en production, relation client, intégration de formulaires dynamiques",
-      gradient: "from-rose-500 to-red-600",
-      image: "/images/cerisecm.png",
-      icon: <Laptop className="w-8 h-8" />,
-      link: "https://cerisecm.com",
-      github: null,
-      status: "En Production",
-      isProduction: true,
-    },
-    {
-      num: "03",
-      category: "Web",
-      filterKeys: ["web"],
-      title: "Hub Formations et Conseil",
-      description:
-        "Plateforme web moderne présentant le catalogue des formations et les solutions de conseil d'entreprise du cabinet HCF Conseil.",
-      technologies: ["React.js", "EmailJS", "Responsive UI"],
-      learnings: "Conception d'interfaces soignées, optimisation SEO, satisfaction client",
-      gradient: "from-violet-500 to-purple-600",
-      image: "/images/hub.png",
-      icon: <Laptop className="w-8 h-8" />,
-      link: "https://hcfconseil.com",
-      github: null,
-      status: "En Production",
-      isProduction: true,
-    },
-    {
-      num: "04",
-      category: "Mobile & Système",
-      filterKeys: ["mobile", "backend"],
-      title: "SGA-UTA — Gestion des Présences",
-      description:
-        "Application de gestion et suivi des présences et absences permettant à l'université d'optimiser le suivi rigoureux de l'assiduité étudiante.",
-      technologies: ["Java", "PostgreSQL", "Architecture MVC"],
-      learnings: "Gestion de projet, modélisation de données académiques, maîtrise de Java",
-      gradient: "from-emerald-500 to-teal-600",
-      image: null,
-      icon: <Smartphone className="w-8 h-8" />,
-      link: "#",
-      github: "https://github.com/Nassere123",
-      status: "Système Universitaire",
-      isProduction: false,
-    },
-    {
-      num: "05",
-      category: "Web",
-      filterKeys: ["web"],
-      title: "Gestion des Notes Scolaires",
-      description:
-        "Application web permettant la saisie des notes, le calcul automatisé des moyennes et la génération de relevés pour l'UTA avec interface intuitive.",
-      technologies: ["PHP", "Laravel", "JavaScript", "MySQL"],
-      learnings: "Architecture MVC Laravel, intégrité des données scolaires, sécurité",
-      gradient: "from-orange-500 to-amber-600",
-      image: null,
-      icon: <Laptop className="w-8 h-8" />,
-      link: "#",
-      github: "https://github.com/Nassere123",
-      status: "Application Web",
-      isProduction: false,
-    },
-    {
-      num: "06",
-      category: "Backend & Système",
-      filterKeys: ["backend"],
-      title: "Système de Gestion de Bibliothèque",
-      description:
-        "Solution complète d'informatisation de bibliothèque permettant la gestion des adhérents, des fiches d'ouvrages et le suivi précis des emprunts.",
-      technologies: ["Java", "MySQL", "JDBC"],
-      learnings: "Bases de données relationnelles, logique métier robuste, respect des délais",
-      gradient: "from-indigo-500 to-violet-600",
-      image: null,
-      icon: <Server className="w-8 h-8" />,
-      link: "#",
-      github: "https://github.com/Nassere123",
-      status: "Système & BDD",
-      isProduction: false,
-    },
-  ]
 
-  const filterCategories = [
-    { id: "all", label: "Tous", count: projects.length },
-    { id: "web", label: "Web", count: projects.filter((p) => p.filterKeys.includes("web")).length },
-    { id: "mobile", label: "Mobile", count: projects.filter((p) => p.filterKeys.includes("mobile")).length },
-    { id: "backend", label: "Backend & Systèmes", count: projects.filter((p) => p.filterKeys.includes("backend")).length },
-  ]
-
-  const filteredProjects =
-    projectFilter === "all"
-      ? projects
-      : projects.filter((p) => p.filterKeys.includes(projectFilter))
 
   const education = [
     {
@@ -606,7 +443,7 @@ export default function Portfolio() {
                     target={s.href.startsWith("http") ? "_blank" : undefined}
                     rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     aria-label={s.label}
-                    className="w-8 h-8 rounded-md border border-indigo-200 flex items-center justify-center text-indigo-500 hover:bg-indigo-50 hover:border-indigo-400 hover:text-indigo-700 transition-all duration-200"
+                    className="p-1.5 text-slate-500 hover:text-indigo-600 transition-colors flex items-center justify-center"
                   >
                     {s.icon}
                   </a>
@@ -644,492 +481,23 @@ export default function Portfolio() {
         </div>
       </nav>
 
-      {/* ── Hero ── */}
-      <section id="home" className="relative min-h-screen flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* ── Hero Monumental Style CodeurAuChapeau ── */}
+      <HeroSection onScrollTo={scrollTo} />
 
-        {/* Blob violet en haut à droite */}
-        <div className="absolute top-0 right-0 w-[520px] h-[520px] bg-gradient-to-bl from-violet-200 via-indigo-100 to-transparent rounded-full blur-3xl opacity-60 pointer-events-none" />
-        {/* Blob bleu en bas à gauche */}
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-gradient-to-tr from-sky-100 to-transparent rounded-full blur-2xl opacity-50 pointer-events-none" />
+      {/* ── Section À propos (Style Bento Aquidev) ── */}
+      <AboutSection />
 
-        <div className="relative max-w-6xl mx-auto w-full pt-20 pb-16">
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
 
-            {/* Photo gauche */}
-            <AnimatedSection delay={100} className="shrink-0">
-              <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-black overflow-hidden shadow-2xl shadow-indigo-200/60 ring-4 ring-white">
-                <img
-                  src="/images/image demoi.jpeg"
-                  alt="Nassere Yacouba"
-                  className="w-full h-full object-cover"
-                  style={{ objectPosition: "center 15%" }}
-                />
-              </div>
-            </AnimatedSection>
 
-            {/* Texte droite */}
-            <div className="flex-1 text-center md:text-left">
-              <AnimatedSection delay={200}>
-                <p className="text-gray-500 text-base md:text-lg font-medium mb-2">
-                  Hey, <span className="text-gray-900 font-semibold">Nassere Yacouba</span>
-                </p>
-              </AnimatedSection>
 
-              <AnimatedSection delay={320}>
-                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight">
-                  <span className="text-indigo-600">{typed}</span>
-                  <span className="animate-pulse text-indigo-400">|</span>
-                </h1>
-              </AnimatedSection>
+      {/* ── Section Réalisations & Projets Bento Grid ── */}
+      <ProjectsBentoSection />
 
-              <AnimatedSection delay={560}>
-                <p className="text-gray-600 max-w-lg mb-8 leading-relaxed text-sm md:text-base font-medium">
-                  Développeur web et mobile, je crée des solutions performantes et centrées sur l'utilisateur.
-                  Curieux et attentif aux détails, je suis en apprentissage constant pour intégrer les dernières
-                  technologies.
-                </p>
-              </AnimatedSection>
+      {/* ── Section Parcours : Expériences & Formations ── */}
+      <JourneySection />
 
-              <AnimatedSection delay={680}>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start mb-10">
-                  <Button
-                    onClick={() => scrollTo("projects")}
-                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-7 py-3 text-sm font-semibold rounded-md transition-all duration-200 hover:shadow-lg hover:shadow-indigo-200"
-                  >
-                    Voir mes projets
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => scrollTo("contact")}
-                    className="border-gray-200 text-gray-700 hover:bg-gray-50 px-7 py-3 text-sm font-semibold rounded-md bg-white"
-                  >
-                    Me contacter
-                  </Button>
-                </div>
-              </AnimatedSection>
-
-              {/* Stats */}
-              <AnimatedSection delay={800}>
-                <div className="flex gap-10 justify-center md:justify-start">
-                  {[
-                    { value: "5+", label: "Projets" },
-                    { value: "15+", label: "Compétences" },
-                    { value: "3 ans", label: "Formation" },
-                  ].map((s) => (
-                    <div key={s.label}>
-                      <div className="text-2xl font-bold text-indigo-600">{s.value}</div>
-                      <div className="text-xs text-gray-400 mt-0.5">{s.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </AnimatedSection>
-            </div>
-          </div>
-
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
-            <ChevronDown className="w-5 h-5 text-gray-300" />
-          </div>
-        </div>
-      </section>
-
-      {/* ── About ── */}
-      <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <AnimatedSection>
-            <SectionTitle>À propos de moi</SectionTitle>
-          </AnimatedSection>
-
-          <AnimatedSection delay={200}>
-            <SoftSkillCards />
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ── Skills ── */}
-      <section id="skills" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
-                Mon <span className="text-indigo-600">Stack</span>
-              </h2>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mt-2">
-                Mes outils tech les plus utilisés
-              </p>
-              <div className="w-16 h-1 bg-indigo-500 mx-auto rounded-full mt-4" />
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={200}>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
-              {[
-                { name: "Java",        color: "#E76F00", icon: "https://cdn.simpleicons.org/openjdk/E76F00" },
-                { name: "Python",      color: "#3776AB", icon: "https://cdn.simpleicons.org/python/3776AB" },
-                { name: "PHP",         color: "#777BB4", icon: "https://cdn.simpleicons.org/php/777BB4" },
-                { name: "JavaScript",  color: "#F7DF1E", icon: "https://cdn.simpleicons.org/javascript/F7DF1E" },
-                { name: "TypeScript",  color: "#3178C6", icon: "https://cdn.simpleicons.org/typescript/3178C6" },
-                { name: "React",       color: "#61DAFB", icon: "https://cdn.simpleicons.org/react/61DAFB" },
-                { name: "Angular",     color: "#DD0031", icon: "https://cdn.simpleicons.org/angular/DD0031" },
-                { name: "React Native",color: "#61DAFB", icon: "https://cdn.simpleicons.org/react/61DAFB" },
-                { name: "Laravel",     color: "#FF2D20", icon: "https://cdn.simpleicons.org/laravel/FF2D20" },
-                { name: "NestJS",      color: "#E0234E", icon: "https://cdn.simpleicons.org/nestjs/E0234E" },
-                { name: "MySQL",       color: "#4479A1", icon: "https://cdn.simpleicons.org/mysql/4479A1" },
-                { name: "PostgreSQL",  color: "#4169E1", icon: "https://cdn.simpleicons.org/postgresql/4169E1" },
-                { name: "MongoDB",     color: "#47A248", icon: "https://cdn.simpleicons.org/mongodb/47A248" },
-                { name: "Git",         color: "#F05032", icon: "https://cdn.simpleicons.org/git/F05032" },
-                { name: "GitHub",      color: "#181717", icon: "https://cdn.simpleicons.org/github/181717" },
-                { name: "Linux",       color: "#FCC624", icon: "https://cdn.simpleicons.org/linux/FCC624" },
-              ].map((tech, i) => (
-                <AnimatedSection key={tech.name} delay={i * 50}>
-                  <div className="flex flex-col items-center gap-3 group cursor-default">
-                    <div className="w-16 h-16 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shadow-sm group-hover:-translate-y-2 group-hover:shadow-md group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-all duration-300">
-                      <img
-                        src={tech.icon}
-                        alt={tech.name}
-                        className="w-8 h-8"
-                      />
-                    </div>
-                    <span className="text-xs font-medium text-gray-500 group-hover:text-indigo-600 transition-colors duration-200 text-center">
-                      {tech.name}
-                    </span>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ── Projects ── */}
-      <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
-                Mes <span className="text-indigo-600">Projets</span> / Réalisations
-              </h2>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mt-2">
-                Solutions développées durant ma formation et mes stages
-              </p>
-              <div className="w-16 h-1 bg-indigo-500 mx-auto rounded-full mt-4" />
-            </div>
-          </AnimatedSection>
-        </div>
-
-        {/* Barre de filtres par catégorie */}
-        <AnimatedSection delay={150}>
-          <div className="flex flex-wrap justify-center items-center gap-2 mb-12">
-            {filterCategories.map((cat) => {
-              const active = projectFilter === cat.id
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setProjectFilter(cat.id as any)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 ${
-                    active
-                      ? "bg-indigo-600 text-white shadow-sm"
-                      : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/50"
-                  }`}
-                >
-                  <span>{cat.label}</span>
-                  <span
-                    className={`px-1.5 py-0.5 rounded text-[11px] font-semibold ${
-                      active ? "bg-white/20 text-white" : "bg-gray-100 text-gray-600"
-                    }`}
-                  >
-                    {cat.count}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </AnimatedSection>
-
-        {/* Grille responsive des réalisations */}
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((p, i) => (
-              <AnimatedSection key={p.title} delay={i * 80}>
-                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md hover:border-indigo-300 transition-all duration-300 flex flex-col h-full group">
-                  {/* Visuel Top (Image ou Mockup avec Dégradé) */}
-                  <div className="h-52 relative overflow-hidden bg-gray-50 border-b border-gray-100">
-                    {p.image ? (
-                      <img
-                        src={p.image}
-                        alt={p.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div
-                        className={`w-full h-full bg-gradient-to-br ${p.gradient} flex flex-col items-center justify-center relative p-6 select-none`}
-                      >
-                        {/* Motif discret */}
-                        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:14px_14px]" />
-                        <div className="w-14 h-14 rounded-md bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-sm mb-2 group-hover:scale-105 transition-transform duration-300">
-                          {p.icon}
-                        </div>
-                        <span className="text-white/90 text-xs font-bold tracking-wider uppercase">
-                          {p.category}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Badge catégorie flottant à gauche */}
-                    <div className="absolute top-3 left-3 flex items-center">
-                      <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider bg-white/95 backdrop-blur-md text-indigo-700 shadow-xs border border-white/60">
-                        {p.category}
-                      </span>
-                    </div>
-
-                    {/* Badge statut flottant à droite */}
-                    <div className="absolute top-3 right-3">
-                      <span
-                        className={`px-2.5 py-1 rounded-md text-[10px] font-medium backdrop-blur-md shadow-xs ${
-                          p.isProduction
-                            ? "bg-emerald-600 text-white"
-                            : "bg-gray-900/80 text-white"
-                        }`}
-                      >
-                        {p.status}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Contenu de la carte */}
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-[11px] font-extrabold text-indigo-500 tracking-wider">
-                          RÉALISATION {p.num}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors leading-snug">
-                        {p.title}
-                      </h3>
-
-                      <p className="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-3">
-                        {p.description}
-                      </p>
-
-                      {/* Technologies */}
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {p.technologies.map((t) => (
-                          <span
-                            key={t}
-                            className="px-2 py-0.5 text-[11px] rounded-md bg-indigo-50/80 text-indigo-600 border border-indigo-100 font-medium"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Apprentissages clés */}
-                      <div className="bg-gray-50/80 border border-gray-100 rounded-md p-3 mb-5">
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                          Apprentissages & Défis
-                        </p>
-                        <p className="text-xs text-gray-600 leading-snug">
-                          {p.learnings}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Boutons d'action */}
-                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2.5">
-                      {p.link !== "#" ? (
-                        <a
-                          href={p.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-md transition-all duration-200 hover:shadow-sm"
-                        >
-                          <span>Voir le site</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      ) : (
-                        <span className="flex-1 inline-flex items-center justify-center gap-1 px-4 py-2 bg-gray-100 text-gray-500 text-xs font-medium rounded-md select-none">
-                          <span>{p.status}</span>
-                        </span>
-                      )}
-
-                      {p.github && (
-                        <a
-                          href={p.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Consulter sur GitHub"
-                          className="w-8 h-8 rounded-md border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 shrink-0"
-                        >
-                          <Github className="w-4 h-4" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Education & Experience ── */}
-      <section id="education" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Parcours</h2>
-              <div className="w-16 h-1 bg-indigo-500 mx-auto rounded-full" />
-            </div>
-          </AnimatedSection>
-
-          <div className="grid md:grid-cols-2 gap-16">
-
-            {/* ── Formation ── */}
-            <AnimatedSection delay={200}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <FontAwesomeIcon icon={faGraduationCap} className="text-indigo-600 text-xl" />
-                Formation
-              </h3>
-              <div className="relative">
-                <div className="absolute left-4 top-0 bottom-0 w-px bg-indigo-100" />
-                <div className="space-y-8">
-                  {[
-                    {
-                      period: "2026",
-                      title: "Certificat HackerRank — Angular",
-                      subtitle: null,
-                      place: "HackerRank",
-                    },
-                    {
-                      period: "2022 – 2025",
-                      title: "Licence en Informatique",
-                      subtitle: "Option Génie Logiciel",
-                      place: "Université de Technologie d'Abidjan",
-                    },
-                    {
-                      period: "2025",
-                      title: "Certificat de Formation Arduino",
-                      subtitle: null,
-                      place: "Orange Digital Center",
-                    },
-                    {
-                      period: "2022",
-                      title: "Baccalauréat Série D",
-                      subtitle: null,
-                      place: "Lycée Moderne Charles Bauza Donwahi de Soubré",
-                    },
-                  ].map((item, i) => (
-                    <div key={i} className="flex gap-6 relative">
-                      <div className="w-8 h-8 rounded-full bg-indigo-600 border-4 border-white shadow flex items-center justify-center shrink-0 z-10">
-                        <div className="w-2 h-2 rounded-full bg-white" />
-                      </div>
-                      <div className="pb-2">
-                        <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest">{item.period}</span>
-                        <h4 className="font-bold text-gray-900 text-base mt-0.5">{item.title}</h4>
-                        {item.subtitle && <p className="text-indigo-400 text-sm">{item.subtitle}</p>}
-                        <p className="text-gray-400 text-sm">{item.place}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </AnimatedSection>
-
-            {/* ── Expériences Pro ── */}
-            <AnimatedSection delay={400}>
-              <div className="md:pl-10">
-              <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <FontAwesomeIcon icon={faBriefcase} className="text-violet-600 text-xl" />
-                Expériences Pro
-              </h3>
-              <div className="relative">
-                <div className="absolute left-4 top-0 bottom-0 w-px bg-violet-100" />
-                <div className="space-y-8">
-                  {[
-                    {
-                      period: "Actuellement",
-                      title: "Développeur Fullstack",
-                      place: "Odace Consulting",
-                      current: true,
-                    },
-                    {
-                      period: "Depuis 2025",
-                      title: "Formateur & Lead Dev",
-                      place: "Neopy Academy",
-                      current: false,
-                    },
-                    {
-                      period: "Sept. 2025 – Fév. 2026",
-                      title: "Stagiaire Dev Fullstack",
-                      place: "LONIYA TECH",
-                      current: false,
-                    },
-                    {
-                      period: "2022 – 2023",
-                      title: "Membre",
-                      place: "Genius Academy",
-                      current: false,
-                    },
-                  ].map((item, i) => (
-                    <div key={i} className="flex gap-6 relative">
-                      <div className={`w-8 h-8 rounded-full border-4 border-white shadow flex items-center justify-center shrink-0 z-10 ${item.current ? "bg-violet-600" : "bg-violet-400"}`}>
-                        <div className="w-2 h-2 rounded-full bg-white" />
-                      </div>
-                      <div className="pb-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold text-violet-500 uppercase tracking-widest">{item.period}</span>
-                          {item.current && (
-                            <span className="px-2 py-0.5 text-xs bg-green-100 text-green-600 rounded-full font-semibold">
-                              En poste
-                            </span>
-                          )}
-                        </div>
-                        <h4 className="font-bold text-gray-900 text-base mt-0.5">{item.title}</h4>
-                        <p className="text-gray-400 text-sm">{item.place}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              </div>
-            </AnimatedSection>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ── Contact ── */}
-      <section id="contact" className="bg-white">
-
-        {/* Discutons-en */}
-        <AnimatedSection>
-          <div className="bg-indigo-50 px-6 sm:px-16 lg:px-24 py-16">
-            <p className="text-gray-400 text-sm mb-3">Vous avez un projet ?</p>
-            <h2 className="text-6xl md:text-8xl font-black text-indigo-600 leading-none mb-6 flex flex-wrap">
-              {"Discutons-en".split("").map((char, i) => (
-                <span
-                  key={i}
-                  className="inline-block animate-wave"
-                  style={{ animationDelay: `${i * 0.07}s` }}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </span>
-              ))}
-            </h2>
-            <div className="flex justify-end">
-              <a
-                href="mailto:moktarnassere@gmail.com"
-                className="text-indigo-500 font-semibold text-base hover:text-indigo-700 transition-colors flex items-center gap-2"
-              >
-                moktarnassere@gmail.com
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-        </AnimatedSection>
-
-      </section>
+      {/* ── Section Contact & Devis ── */}
+      <ContactSection />
 
       {/* ── Footer ── */}
       <footer className="border-t border-gray-100 py-10 px-4 text-center bg-white">
@@ -1154,7 +522,17 @@ export default function Portfolio() {
             </a>
           ))}
         </div>
-        <p className="text-gray-300 text-xs">© 2025 Nassere Yacouba. Tous droits réservés.</p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-gray-400 text-xs">
+          <p>© 2025 Nassere Yacouba. Tous droits réservés.</p>
+          <span className="hidden sm:inline text-gray-300">•</span>
+          <a
+            href="/admin"
+            className="hover:text-indigo-600 transition-colors inline-flex items-center gap-1 text-[11px] text-gray-400 hover:underline"
+          >
+            <Lock className="w-3 h-3" />
+            <span>Espace Admin</span>
+          </a>
+        </div>
       </footer>
 
       {/* Assistant Virtuel Chatbot */}
