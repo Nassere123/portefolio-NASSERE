@@ -18,14 +18,17 @@ import {
   TrendingUp,
   Sparkles,
   Filter,
+  ShieldCheck,
+  RotateCcw,
 } from "lucide-react"
-import { ProjectData } from "@/lib/projects-data"
+import { INITIAL_PROJECTS, ProjectData } from "@/lib/projects-data"
 import ProjectModal from "@/components/admin/ProjectModal"
 import ActivityChart from "@/components/admin/ActivityChart"
 
 export default function AdminDashboardPage() {
-  const [projects, setProjects] = useState<ProjectData[]>([])
-  const [loading, setLoading] = useState(true)
+  // Mode 100% Front-End : Les projets sont gérés uniquement dans l'état React local
+  // Vos projets réels déployés restent strictement protégés et intouchables
+  const [projects, setProjects] = useState<ProjectData[]>(INITIAL_PROJECTS)
   const [searchQuery, setSearchQuery] = useState("")
   const [filterCategory, setFilterCategory] = useState("all")
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -37,74 +40,57 @@ export default function AdminDashboardPage() {
     setTimeout(() => setToastMessage(null), 3500)
   }
 
-  const fetchProjects = async () => {
-    try {
-      setLoading(true)
-      const res = await fetch("/api/admin/projects")
-      const data = await res.json()
-      if (data.success && Array.isArray(data.projects)) {
-        setProjects(data.projects)
-      }
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchProjects()
-  }, [])
-
   const handleSaveProject = async (projectData: Partial<ProjectData>) => {
     if (projectToEdit) {
-      // Modification
-      const res = await fetch("/api/admin/projects", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: projectToEdit.id, ...projectData }),
-      })
-      const result = await res.json()
-      if (result.success) {
-        showToast("Projet mis à jour avec succès !")
-        fetchProjects()
-      } else {
-        throw new Error(result.error || "Erreur de mise à jour")
-      }
+      // Modification locale dans le state front
+      setProjects((prev) =>
+        prev.map((p) => (p.id === projectToEdit.id ? ({ ...p, ...projectData } as ProjectData) : p))
+      )
+      showToast("Simulation Front-End : Projet mis à jour (aucun impact en ligne)")
     } else {
-      // Création
-      const res = await fetch("/api/admin/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(projectData),
-      })
-      const result = await res.json()
-      if (result.success) {
-        showToast("Nouveau projet ajouté avec succès !")
-        fetchProjects()
-      } else {
-        throw new Error(result.error || "Erreur d'ajout")
+      // Ajout local dans le state front
+      const nextIndex = projects.length + 1
+      const newProj: ProjectData = {
+        id: "proj-" + Date.now(),
+        num: nextIndex < 10 ? `0${nextIndex}` : `${nextIndex}`,
+        category: projectData.category || "Web",
+        filterKeys: projectData.filterKeys || ["web"],
+        title: projectData.title || "Nouveau Projet",
+        description: projectData.description || "",
+        technologies: Array.isArray(projectData.technologies)
+          ? projectData.technologies
+          : (projectData.technologies || "").split(",").map((t: string) => t.trim()).filter(Boolean),
+        learnings: projectData.learnings || "",
+        gradient: projectData.gradient || "from-indigo-500 to-violet-600",
+        image: projectData.image || null,
+        iconName: projectData.iconName || "Laptop",
+        link: projectData.link || "#",
+        github: projectData.github || null,
+        status: projectData.status || "En Développement",
+        isProduction: Boolean(projectData.isProduction),
+        createdAt: new Date().toISOString(),
       }
+      setProjects((prev) => [newProj, ...prev])
+      showToast("Simulation Front-End : Nouveau projet ajouté (aucun impact en ligne)")
     }
   }
 
-  const handleDeleteProject = async (id: string, title: string) => {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer définitivement le projet "${title}" ?`)) {
+  const handleDeleteProject = (id: string, title: string) => {
+    if (
+      !confirm(
+        `[Mode Démo Front-End]\n\nVoulez-vous retirer visuellement le projet "${title}" de cette session d'administration ?\n\n(Rassurez-vous : vos projets réels déployés restent 100% intacts et protégés).`
+      )
+    ) {
       return
     }
 
-    try {
-      const res = await fetch(`/api/admin/projects?id=${id}`, { method: "DELETE" })
-      const result = await res.json()
-      if (result.success) {
-        showToast("Projet supprimé.")
-        fetchProjects()
-      } else {
-        alert(result.error || "Erreur de suppression")
-      }
-    } catch (e) {
-      alert("Erreur de connexion")
-    }
+    setProjects((prev) => prev.filter((p) => p.id !== id))
+    showToast("Projet retiré de la vue locale (aucun impact sur votre site déployé)")
+  }
+
+  const handleResetProjects = () => {
+    setProjects(INITIAL_PROJECTS)
+    showToast("Liste réinitialisée avec vos 6 projets officiels par défaut.")
   }
 
   const handleOpenAdd = () => {
@@ -157,13 +143,31 @@ export default function AdminDashboardPage() {
           </p>
         </div>
 
-        <button
-          onClick={handleOpenAdd}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-md shadow-sm transition-all self-start sm:self-auto hover:shadow-indigo-200 hover:shadow-md"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Ajouter un Projet</span>
-        </button>
+        <div className="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
+          <button
+            onClick={handleResetProjects}
+            title="Réinitialiser la liste avec les 6 projets officiels"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-md border border-slate-300 transition-all cursor-pointer"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+            <span>Réinitialiser</span>
+          </button>
+          <button
+            onClick={handleOpenAdd}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-md shadow-xs transition-all hover:shadow-indigo-200 hover:shadow-md cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Ajouter un Projet</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── Bannière de Protection & Mode Front-End ── */}
+      <div className="flex items-start sm:items-center gap-3 bg-emerald-50/90 border border-emerald-200 text-emerald-950 px-4 py-3 rounded-lg text-xs shadow-2xs">
+        <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5 sm:mt-0" />
+        <div className="flex-1 leading-relaxed">
+          <strong className="font-bold text-emerald-900">Mode Front-End Sécurisé :</strong> Vos projets réels en production sont 100% verrouillés et protégés. Toute action effectuée ici (ajout, modification, suppression) reste strictement confinée à cette session d'administration locale sans jamais impacter votre portfolio en ligne.
+        </div>
       </div>
 
       {/* ── 4 Widgets Statistiques CoreUI ── */}
@@ -423,9 +427,12 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Table Footer */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs text-slate-500">
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
           <span>Affichage de {filteredProjects.length} sur {projects.length} projet(s)</span>
-          <span className="text-[11px] text-slate-400">Toutes les modifications sont synchronisées avec le site public</span>
+          <span className="text-[11px] text-emerald-700 font-medium flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            Vos projets réels en ligne restent 100% protégés (Mode Front-End isolé)
+          </span>
         </div>
       </div>
 

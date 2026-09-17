@@ -20,21 +20,11 @@ import {
 import { INITIAL_PROJECTS, ProjectData } from "@/lib/projects-data"
 
 export default function ProjectsBentoSection() {
-  const [projects, setProjects] = useState<ProjectData[]>(INITIAL_PROJECTS)
+  // Les projets du portfolio public sont strictement verrouillés sur la source officielle
+  // Aucune action dans la console d'administration ne peut modifier ou supprimer vos projets déployés
+  const projects = INITIAL_PROJECTS
   const [filter, setFilter] = useState<"all" | "web" | "mobile" | "backend">("all")
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
-
-  // Chargement des données à jour depuis l'API (avec fallback automatique)
-  useEffect(() => {
-    fetch("/api/admin/projects")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.projects) && data.projects.length > 0) {
-          setProjects(data.projects)
-        }
-      })
-      .catch(() => {})
-  }, [])
 
   const filteredProjects =
     filter === "all"
