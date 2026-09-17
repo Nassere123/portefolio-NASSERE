@@ -20,6 +20,7 @@ import {
   Filter,
   ShieldCheck,
   RotateCcw,
+  Construction,
 } from "lucide-react"
 import { INITIAL_PROJECTS, ProjectData } from "@/lib/projects-data"
 import ProjectModal from "@/components/admin/ProjectModal"
@@ -162,11 +163,11 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* ── Bannière de Protection & Mode Front-End ── */}
-      <div className="flex items-start sm:items-center gap-3 bg-emerald-50/90 border border-emerald-200 text-emerald-950 px-4 py-3 rounded-lg text-xs shadow-2xs">
-        <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5 sm:mt-0" />
+      {/* ── Bannière En cours de développement ── */}
+      <div className="flex items-start sm:items-center gap-3 bg-amber-50/90 border border-amber-200 text-amber-950 px-4 py-3 rounded-lg text-xs shadow-2xs">
+        <Construction className="w-5 h-5 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
         <div className="flex-1 leading-relaxed">
-          <strong className="font-bold text-emerald-900">Mode Front-End Sécurisé :</strong> Vos projets réels en production sont 100% verrouillés et protégés. Toute action effectuée ici (ajout, modification, suppression) reste strictement confinée à cette session d'administration locale sans jamais impacter votre portfolio en ligne.
+          <strong className="font-bold text-amber-900">Section en cours de développement :</strong> Cette interface d&apos;administration est actuellement en cours de développement. Vos projets en ligne restent inchangés et sécurisés.
         </div>
       </div>
 
@@ -420,9 +421,9 @@ export default function AdminDashboardPage() {
         {/* Table Footer */}
         <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
           <span>Affichage de {filteredProjects.length} sur {projects.length} projet(s)</span>
-          <span className="text-[11px] text-emerald-700 font-medium flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            Vos projets réels en ligne restent 100% protégés (Mode Front-End isolé)
+          <span className="text-[11px] text-amber-800 font-medium flex items-center gap-1.5">
+            <Construction className="w-3.5 h-3.5 text-amber-600" />
+            Module de gestion en cours de développement
           </span>
         </div>
       </div>
