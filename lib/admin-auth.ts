@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "nassere2025"
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Mycodeforme123"
 const COOKIE_NAME = "admin_session"
 // Jeton simple et robuste pour la session locale/serverless
 const SESSION_TOKEN = "session_" + Buffer.from(ADMIN_PASSWORD + "_authorized_admin").toString("base64")

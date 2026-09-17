@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Lock, ArrowRight, ShieldCheck, Eye, EyeOff, Sparkles, ArrowLeft } from "lucide-react"
+import { Lock, ArrowRight, ShieldCheck, Eye, EyeOff, ArrowLeft } from "lucide-react"
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState("")
@@ -70,10 +70,6 @@ export default function AdminLoginPage() {
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/25 border border-indigo-400/20">
               <ShieldCheck className="w-7 h-7 text-white" />
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold mb-2 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Espace Administrateur</span>
-            </div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">Nassere Yacouba</h1>
             <p className="text-xs text-slate-500 mt-1">
               Tableau de bord de gestion du portfolio
@@ -129,14 +125,6 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-500">
-              Mot de passe par défaut configuré :{" "}
-              <code className="text-indigo-600 bg-indigo-50/80 font-mono font-medium px-2 py-0.5 rounded-md border border-indigo-100">
-                nassere2025
-              </code>
-            </p>
-          </div>
         </div>
       </div>
     </div>
