@@ -1,12 +1,25 @@
 import { cookies } from "next/headers"
+import crypto from "crypto"
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Mycodeforme123"
+// Empreinte cryptographique SHA-256 : le mot de passe en clair n'apparaît JAMAIS dans le code sur GitHub
+const DEFAULT_PASSWORD_HASH = "c862afe42beb9c0f3db2fafc05302eae081076d60803d9142c597a5601ea6f8c"
+
 const COOKIE_NAME = "admin_session"
-// Jeton simple et robuste pour la session locale/serverless
-const SESSION_TOKEN = "session_" + Buffer.from(ADMIN_PASSWORD + "_authorized_admin").toString("base64")
+const SESSION_SECRET = process.env.SESSION_SECRET || "nassere_secure_dashboard_session_key_2026"
+const SESSION_TOKEN = "session_" + crypto.createHash("sha256").update(DEFAULT_PASSWORD_HASH + SESSION_SECRET).digest("base64")
 
 export function checkAdminPassword(password: string): boolean {
-  return password.trim() === ADMIN_PASSWORD
+  if (!password) return false
+  const trimmed = password.trim()
+
+  // 1. Vérification via la variable d'environnement privée si configurée
+  if (process.env.ADMIN_PASSWORD && trimmed === process.env.ADMIN_PASSWORD) {
+    return true
+  }
+
+  // 2. Vérification par comparaison d'empreinte SHA-256 sécurisée
+  const inputHash = crypto.createHash("sha256").update(trimmed).digest("hex")
+  return crypto.timingSafeEqual(Buffer.from(inputHash), Buffer.from(DEFAULT_PASSWORD_HASH))
 }
 
 export function getSessionToken(): string {
