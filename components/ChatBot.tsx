@@ -133,6 +133,7 @@ export default function ChatBot() {
       if (res.ok) {
         const data = await res.json()
         replyText = data.reply
+        console.log(`🤖 [Chatbot] Source: ${data.source || 'inconnue'} | Réponse reçue avec succès`)
       }
 
       if (!replyText) {
