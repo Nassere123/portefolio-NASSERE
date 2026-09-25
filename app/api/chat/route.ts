@@ -113,6 +113,10 @@ export async function POST(req: Request) {
       model = "qwen/qwen3.8-27b"
     }
 
+    // Debug serveur : voir quelle clé et quel modèle sont utilisés
+    console.log(`[Chatbot Debug] Clé trouvée: ${apiKey ? apiKey.substring(0, 10) + "..." : "AUCUNE"} | Modèle: ${model}`)
+    console.log(`[Chatbot Debug] Vars disponibles: GEMINI_API_KEY=${!!process.env.GEMINI_API_KEY}, OPENROUTER_API_KEY=${!!process.env.OPENROUTER_API_KEY}, GEMINI_MODEL=${process.env.GEMINI_MODEL || "non défini"}`)
+
     // Si aucune clé API n'est définie, utiliser le fallback intelligent local
     if (!apiKey) {
       const reply = getLocalFallbackResponse(lastUserMessage)
