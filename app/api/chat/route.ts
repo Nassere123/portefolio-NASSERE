@@ -106,11 +106,11 @@ export async function POST(req: Request) {
     let model =
       process.env.GEMINI_MODEL ||
       process.env.gemini_model ||
-      "google/gemma-4-31b-it"
+      "qwen/qwen3.8-27b"
 
     // Normalisation du modèle (remplacer les valeurs obsolètes/invalides comme gemma-4)
     if (!model || model.includes("gemma-4")) {
-      model = "google/gemma-2-27b-it"
+      model = "qwen/qwen3.8-27b"
     }
 
     // Si aucune clé API n'est définie, utiliser le fallback intelligent local
@@ -123,7 +123,7 @@ export async function POST(req: Request) {
 
     // ── Cas 1 : Clé OpenRouter (clé commençant par sk-or-) ──────────
     if (apiKey.startsWith("sk-or-")) {
-      const openRouterModel = model.includes("/") ? model : "google/gemma-2-27b-it"
+      const openRouterModel = model.includes("/") ? model : "qwen/qwen3.8-27b"
       const formattedMessages = [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages.map((m: { role: string; content: string }) => ({
