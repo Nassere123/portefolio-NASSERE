@@ -108,6 +108,11 @@ export async function POST(req: Request) {
       process.env.gemini_model ||
       "google/gemma-4-31b-it"
 
+    // Normalisation du modèle (remplacer les valeurs obsolètes/invalides comme gemma-4)
+    if (!model || model.includes("gemma-4")) {
+      model = "google/gemma-2-27b-it"
+    }
+
     // Si aucune clé API n'est définie, utiliser le fallback intelligent local
     if (!apiKey) {
       const reply = getLocalFallbackResponse(lastUserMessage)
@@ -118,7 +123,7 @@ export async function POST(req: Request) {
 
     // ── Cas 1 : Clé OpenRouter (clé commençant par sk-or-) ──────────
     if (apiKey.startsWith("sk-or-")) {
-      const openRouterModel = model.includes("/") ? model : "google/gemma-4-31b-it"
+      const openRouterModel = model.includes("/") ? model : "google/gemma-2-27b-it"
       const formattedMessages = [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages.map((m: { role: string; content: string }) => ({
@@ -127,31 +132,37 @@ export async function POST(req: Request) {
         })),
       ]
 
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://portfolio-nassere.com",
-          "X-Title": "Portfolio Nassere Yacouba",
-        },
-        body: JSON.stringify({
-          model: openRouterModel,
-          messages: formattedMessages,
-          temperature: 0.7,
-          max_tokens: 600,
-        }),
-      })
+      try {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://portfolio-nassere.com",
+            "X-Title": "Portfolio Nassere Yacouba",
+          },
+          body: JSON.stringify({
+            model: openRouterModel,
+            messages: formattedMessages,
+            temperature: 0.7,
+            max_tokens: 600,
+          }),
+          signal: AbortSignal.timeout(12000),
+        })
 
-      if (response.ok) {
-        const data = await response.json()
-        textReply = data.choices?.[0]?.message?.content || ""
-      } else {
-        console.warn(`Erreur OpenRouter (${response.status}), basculement sur le moteur local...`)
+        if (response.ok) {
+          const data = await response.json()
+          textReply = data.choices?.[0]?.message?.content || ""
+        } else {
+          console.warn(`Erreur OpenRouter (${response.status}), basculement sur le moteur local...`)
+          textReply = getLocalFallbackResponse(lastUserMessage)
+        }
+      } catch (openRouterErr) {
+        console.warn("Délai d'attente ou erreur réseau OpenRouter, utilisation de la réponse locale :", openRouterErr)
         textReply = getLocalFallbackResponse(lastUserMessage)
       }
 
-      return NextResponse.json({ reply: textReply || getLocalFallbackResponse(lastUserMessage), source: "openrouter_gemma" })
+      return NextResponse.json({ reply: textReply || getLocalFallbackResponse(lastUserMessage), source: "openrouter" })
     }
 
     // ── Cas 2 : Clé Google AI Studio standard ───────────────────────
@@ -161,31 +172,37 @@ export async function POST(req: Request) {
       parts: [{ text: m.content }],
     }))
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${googleModel}:generateContent?key=${apiKey}`
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents,
-        systemInstruction: {
-          parts: [{ text: SYSTEM_PROMPT }],
-        },
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 600,
-        },
-      }),
-    })
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${googleModel}:generateContent?key=${apiKey}`
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          systemInstruction: {
+            parts: [{ text: SYSTEM_PROMPT }],
+          },
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 600,
+          },
+        }),
+        signal: AbortSignal.timeout(12000),
+      })
 
-    if (!response.ok) {
-      console.warn(`Erreur API Gemini (${response.status}), basculement sur le moteur local...`)
+      if (!response.ok) {
+        console.warn(`Erreur API Gemini (${response.status}), basculement sur le moteur local...`)
+        textReply = getLocalFallbackResponse(lastUserMessage)
+      } else {
+        const data = await response.json()
+        textReply = data.candidates?.[0]?.content?.parts?.[0]?.text || getLocalFallbackResponse(lastUserMessage)
+      }
+    } catch (geminiErr) {
+      console.warn("Délai d'attente ou erreur réseau Gemini, utilisation de la réponse locale :", geminiErr)
       textReply = getLocalFallbackResponse(lastUserMessage)
-    } else {
-      const data = await response.json()
-      textReply = data.candidates?.[0]?.content?.parts?.[0]?.text || getLocalFallbackResponse(lastUserMessage)
     }
 
-    return NextResponse.json({ reply: textReply, source: "gemini" })
+    return NextResponse.json({ reply: textReply || getLocalFallbackResponse(lastUserMessage), source: "gemini" })
   } catch (error) {
     console.error("Erreur serveur chatbot:", error)
     return NextResponse.json({
